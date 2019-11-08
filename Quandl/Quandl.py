@@ -10,6 +10,8 @@ import datetime
 import json
 import pandas as pd
 import re
+import requests
+from StringIO import StringIO
 from dateutil import parser
 from numpy import genfromtxt
 
@@ -211,7 +213,9 @@ def _parse_dates(date):
 
 # Download data into pandas dataframe
 def _download(url):
-    dframe = pd.read_csv(url, index_col=0, parse_dates=True)
+    response = requests.get(url)
+    content = StringIO(response.content)
+    dframe = pd.read_csv(content, index_col=0, parse_dates=True)
     return dframe
 
 #Push data to Quandl. Returns json of HTTP push.
